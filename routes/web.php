@@ -20,4 +20,7 @@ Route::get('/input', function () {
 });
 
 Route::post('/input', [App\Http\Controllers\InputController::class, 'upload'])->name('input.upload');
-Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+
+Route::get('/daily', [LogController::class, 'daily'])->name('logs.daily');
+Route::get('/weekly', [LogController::class, 'weekly'])->name('logs.weekly');
+Route::get('/monthly', [LogController::class, 'monthly'])->name('logs.monthly');

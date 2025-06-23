@@ -73,9 +73,9 @@ class InputController extends Controller
                 $amount = null;
                 $sleepMinutes = null;
 
-                if (preg_match('/^(ミルク|搾母乳|搾乳)\s+(\d+ml)$/u', $content, $m)) {
+                if (preg_match('/^(ミルク|搾母乳|搾乳)\s+(\d+)(ml)?$/u', $content, $m)) {
                     $activity = $m[1];
-                    $amount = $m[2];
+                    $amount = intval($m[2]); // ← ここで数値として保存
                 } elseif (preg_match('/^寝る$/u', $content)) {
                     $activity = '寝る';
                 } elseif (preg_match('/^起きる\s*\((\d+)時間(\d+)分\)/u', $rawContent, $m)) {

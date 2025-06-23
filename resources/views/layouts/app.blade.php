@@ -11,6 +11,7 @@
 
     <header>
         <h1>そらぴよログ管理</h1>
+        @include('components.navi')
     </header>
 
     <main>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-
 @section('content')
+@include('components.sort-form')一覧
     <h2>@include('components.sitename')一覧</h2>
 
     @if (session('success'))
@@ -27,7 +27,7 @@
                     <td>{{ $log->time }}</td>
                     <td>{{ $log->babyName->name }}</td>
                     <td>{{ $log->activity }}</td>
-                    <td>{{ $log->amount ?? '-' }}</td>
+                    <td>{{ isset($log->amount) ? $log->amount . 'ml' : '-' }}</td>
                     <td>{{ $log->sleep_minutes ?? '-' }}</td>
                     <td>{{ $log->textlog ?? '-' }}</td>
                 </tr>

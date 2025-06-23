@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('date');                        // 日付
             $table->time('time');                        // 時刻
             $table->string('activity');                  // 活動名（ミルクなど）
-            $table->string('amount')->nullable();        // 量（例: 60ml）
+            $table->integer('amount')->nullable(); // ← string → integer に変更
             $table->integer('sleep_minutes')->nullable();// 起きるの睡眠時間（分）
             $table->text('textlog')->nullable();         // 補足やコメントなど
             $table->timestamps();
