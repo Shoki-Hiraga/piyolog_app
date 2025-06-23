@@ -1,1 +1,1 @@
-@extends('layouts.app')
+@include('components.input')

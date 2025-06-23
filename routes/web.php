@@ -17,10 +17,10 @@ use App\Http\Controllers\LogController;
 
 Route::get('/', function () {
     return view('main.index');
-});
+})->name('main.index');
 
 Route::get('/input', function () {
-    return view('main.input');
+    return view('components.input');
 });
 Route::post('/input', [App\Http\Controllers\InputController::class, 'upload'])->name('input.upload');
 

@@ -1,6 +1,4 @@
-@include('components.noindex')
-@include('components.header')
-
+@extends('layouts.app')
 <form action="{{ route('input.upload') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <label for="logfile">ぴよログファイルを選択:</label>
