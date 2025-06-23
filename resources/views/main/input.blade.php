@@ -1,3 +1,6 @@
+@include('components.noindex')
+@include('components.header')
+
 <form action="{{ route('input.upload') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <label for="logfile">ぴよログファイルを選択:</label>
@@ -7,3 +10,6 @@
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 </form>
+@if(session('success'))
+  <div class="alert alert-success">{{ session('success') }}</div>
+@endif

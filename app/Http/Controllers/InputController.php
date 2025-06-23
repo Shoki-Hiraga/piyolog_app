@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Log;
 use App\Models\BabyName;
+use App\Models\ImportLog;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -12,13 +13,20 @@ class InputController extends Controller
 {
     public function upload(Request $request)
     {
+        // バリデーション
         $request->validate([
             'logfile' => 'required|file|mimes:txt',
         ]);
 
         $file = $request->file('logfile');
-        $lines = file($file->getRealPath(), FILE_IGNORE_NEW_LINES);
+        $fileHash = md5_file($file->getRealPath());
 
+        // ✅ 同じファイル内容をスキップ
+        if (ImportLog::where('file_hash', $fileHash)->exists()) {
+            return redirect('/input')->with('success', '同じ内容のファイルは既にインポート済みです。');
+        }
+
+        $lines = file($file->getRealPath(), FILE_IGNORE_NEW_LINES);
         $currentDate = null;
         $babyNameId = null;
 
@@ -42,23 +50,23 @@ class InputController extends Controller
                 continue;
             }
 
-            // ✅ 活動行
+            // ✅ 活動行（時刻 + 内容）
             if (preg_match('/^(\d{2}:\d{2})\s+(.+)$/u', $line, $matches)) {
                 $time = $matches[1];
                 $rawContent = $matches[2];
 
-                // 2スペース以上で分割 → コメント抽出
+                // コメント抽出（2つ以上のスペースで分割）
                 $parts = preg_split('/\s{2,}/u', $rawContent, 2);
                 $mainContent = trim($parts[0]);
                 $textlog = isset($parts[1]) ? trim($parts[1]) : null;
 
-                // ()補足 → textlogに追加
+                // ()補足を textlog に追加
                 preg_match_all('/\((.*?)\)/u', $mainContent, $parens);
                 if (!empty($parens[1])) {
                     $textlog = trim(implode('、', $parens[1]) . ($textlog ? '、' . $textlog : ''));
                 }
 
-                // ()補足を削除して活動名に
+                // ()補足を取り除いて activity を抽出
                 $content = preg_replace('/\s*\(.+?\)/u', '', $mainContent);
 
                 $activity = null;
@@ -77,7 +85,7 @@ class InputController extends Controller
                     $activity = $content;
                 }
 
-                // デバッグログ
+                // ログ出力（デバッグ用）
                 \Log::info('登録予定', [
                     'baby_name_id' => $babyNameId,
                     'date' => $currentDate,
@@ -88,7 +96,7 @@ class InputController extends Controller
                     'textlog' => $textlog,
                 ]);
 
-                // 安全チェック後に保存
+                // 登録
                 if ($babyNameId && $activity && $currentDate && $time) {
                     Log::create([
                         'baby_name_id' => $babyNameId,
@@ -103,6 +111,11 @@ class InputController extends Controller
             }
         }
 
-        return redirect('/input')->with('success', 'ぴよログを取り込みました！');
+        // ✅ インポート済みファイルとして記録
+        ImportLog::create([
+            'file_hash' => $fileHash,
+        ]);
+
+        return redirect('/input')->with('success', 'ぴよログをインポートしました！');
     }
 }
