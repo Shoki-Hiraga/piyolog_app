@@ -33,3 +33,19 @@ th, td {
 th {
     background: #eee;
 }
+
+nav a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    text-decoration: none;
+    background-color: #3498db; /* 青系のボタン */
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+nav a:hover {
+    background-color: #2980b9; /* ホバー時に少し濃く */
+}

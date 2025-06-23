@@ -15,10 +15,13 @@ use App\Http\Controllers\LogController;
 |
 */
 
+Route::get('/', function () {
+    return view('main.index');
+});
+
 Route::get('/input', function () {
     return view('main.input');
 });
-
 Route::post('/input', [App\Http\Controllers\InputController::class, 'upload'])->name('input.upload');
 
 Route::get('/daily', [LogController::class, 'daily'])->name('logs.daily');
