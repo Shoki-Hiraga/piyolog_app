@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InputController;
+use App\Http\Controllers\LogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +20,4 @@ Route::get('/input', function () {
 });
 
 Route::post('/input', [App\Http\Controllers\InputController::class, 'upload'])->name('input.upload');
+Route::get('/logs', [LogController::class, 'index'])->name('logs.index');

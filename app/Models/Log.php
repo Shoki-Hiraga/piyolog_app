@@ -21,7 +21,7 @@ class Log extends Model
 
     public function babyName()
     {
-        return $this->belongsTo(BabyName::class);
+        return $this->belongsTo(\App\Models\BabyName::class);
     }
 
 }
