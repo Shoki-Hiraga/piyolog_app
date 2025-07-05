@@ -8,7 +8,7 @@
         @php
             $totalAmount = $group->sum('amount');
         @endphp
-        <p><strong>日合計量: {{ $totalAmount }}ml</strong></p>
+        <p class="amount"><strong>日合計量: {{ $totalAmount }}ml</strong></p>
 
         <table>
             <thead>
@@ -19,7 +19,7 @@
             <tbody>
                 @foreach ($group as $log)
                     <tr>
-                        <td>{{ $log->time }}</td>
+                        <td>{{ \Carbon\Carbon::parse($log->time)->format('H:i') }}</td>
                         <td>{{ $log->babyName->name }}</td>
                         <td>{{ $log->activity }}</td>
                         <td>{{ isset($log->amount) ? $log->amount . 'ml' : '-' }}</td>

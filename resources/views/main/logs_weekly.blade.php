@@ -11,7 +11,7 @@
         @php
             $totalAmount = $group->sum('amount');
         @endphp
-        <p><strong>週合計量: {{ $totalAmount }}ml</strong></p>
+        <p class="amount"><strong>週合計量: {{ $totalAmount }}ml</strong></p>
 
         <table>
             <thead>
@@ -22,8 +22,8 @@
             <tbody>
                 @foreach ($group->sortBy('date') as $log)
                     <tr>
-                        <td>{{ $log->date }}</td>
-                        <td>{{ $log->time }}</td>
+                        <td>{{ \Carbon\Carbon::parse($log->date)->format('m-d') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($log->time)->format('H:i') }}</td>
                         <td>{{ $log->babyName->name }}</td>
                         <td>{{ $log->activity }}</td>
                         <td>{{ isset($log->amount) ? $log->amount . 'ml' : '-' }}</td>

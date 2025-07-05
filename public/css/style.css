@@ -49,3 +49,30 @@ nav a {
 nav a:hover {
     background-color: #2980b9; /* ホバー時に少し濃く */
 }
+
+.amount {
+    color: #ff0000;
+}
+
+/* モバイルでテーブルがはみ出さないように横スクロールを許可 */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th, td {
+        font-size: 0.9rem; /* 少し小さめで詰める */
+        padding: 0.4rem;
+    }
+
+    body {
+        padding: 1rem;
+    }
+
+    main {
+        padding: 1rem;
+    }
+}
