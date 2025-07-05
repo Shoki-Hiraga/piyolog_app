@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+@include('components.monthly-form')
+
     <h2>月別ログ一覧</h2>
     @foreach ($logs as $month => $group)
         <h3>{{ $month }}</h3>

@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2>日別ログ一覧</h2>
+@include('components.daily-form')
+
+<h2>日別ログ一覧</h2>
     @foreach ($logs as $date => $group)
-        <h3>{{ $date }}</h3>
+
+    <h3>{{ $date }}</h3>
 
         @php
             $totalAmount = $group->sum('amount');

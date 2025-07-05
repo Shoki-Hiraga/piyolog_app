@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+@include('components.weekly-form')
+
     <h2>週別ログ一覧</h2>
     
     @foreach ($logs as $weekStart => $group)

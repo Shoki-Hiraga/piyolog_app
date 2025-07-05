@@ -10,35 +10,63 @@ use Carbon\Carbon;
 
 class LogController extends Controller
 {
-    public function daily()
+    public function daily(Request $request)
     {
-        $logs = Log::with('babyName')
-            ->orderBy('date', 'asc')
-            ->orderBy('time', 'asc')
-            ->get()
-            ->groupBy('date');
+        $query = Log::with('babyName');
+
+        $startDate = $request->filled('start_date') ? Carbon::parse($request->start_date) : Carbon::today();
+        $endDate = $request->filled('end_date') ? Carbon::parse($request->end_date) : Carbon::today();
+
+        $query->whereBetween('date', [$startDate, $endDate]);
+
+        $logs = $query->orderBy('date', 'asc')
+                    ->orderBy('time', 'asc')
+                    ->get()
+                    ->groupBy('date');
 
         return view('main.logs_daily', compact('logs'));
     }
 
-    public function weekly()
+
+    public function weekly(Request $request)
     {
-        $logs = Log::with('babyName')
-            ->get()
-            ->groupBy(function ($item) {
-                return Carbon::parse($item->date)->startOfWeek()->format('Y-m-d');
-            });
+        $query = Log::with('babyName');
+
+        if ($request->filled('start_week') && $request->filled('end_week')) {
+            $startDate = Carbon::parse($request->start_week); // 選択された週の開始日
+            $endDate = Carbon::parse($request->end_week)->addDays(6); // その週の終了日
+
+            $query->whereBetween('date', [$startDate, $endDate]);
+        }
+
+        $logs = $query->orderBy('date', 'asc')
+                    ->orderBy('time', 'asc')
+                    ->get()
+                    ->groupBy(function ($log) {
+                        return Carbon::parse($log->date)->startOfWeek(Carbon::SUNDAY)->format('Y-m-d');
+                    });
 
         return view('main.logs_weekly', compact('logs'));
     }
 
-    public function monthly()
+
+    public function monthly(Request $request)
     {
-        $logs = Log::with('babyName')
-            ->get()
-            ->groupBy(function ($item) {
-                return Carbon::parse($item->date)->format('Y-m');
-            });
+        $query = Log::with('babyName');
+
+        if ($request->filled('start_month') && $request->filled('end_month')) {
+            $startDate = Carbon::parse($request->start_month)->startOfMonth();
+            $endDate = Carbon::parse($request->end_month)->endOfMonth();
+
+            $query->whereBetween('date', [$startDate, $endDate]);
+        }
+
+        $logs = $query->orderBy('date', 'asc')
+                    ->orderBy('time', 'asc')
+                    ->get()
+                    ->groupBy(function ($log) {
+                        return Carbon::parse($log->date)->format('Y-m');
+                    });
 
         return view('main.logs_monthly', compact('logs'));
     }
